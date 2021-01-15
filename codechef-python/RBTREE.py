@@ -1,9 +1,9 @@
 from math import log, log2, floor
 
 
-# 5 Qb 4 5 Qr 4 5 Qi Qb 4 5 Qr 4 5
-# 1 Qb 8 7
-
+# 7 Qb 4 5 Qr 4 5 Qi Qb 4 5 Qr 4 5 Qb 8 7 Qb 8 15
+# 5 Qb 90 100 Qb 1 20 Qb 4 1 Qr 74 52 Qb 21 2
+# 1 Qb 1 20
 def calc_rb(n1, n2):
 
 
@@ -14,7 +14,7 @@ def calc_rb(n1, n2):
         return n % (2 ** h)
 
     def get_tree_relative_position(line_position, height):
-        return 'left' if line_position < height else 'right'
+        return 'left' if line_position < 2**(height-1) else 'right'
 
     def get_height(n):
         if n == 1:
@@ -36,35 +36,33 @@ def calc_rb(n1, n2):
     #     print(i, get_tree_line_position(line_position, h_n2))
 
 
+    print("LINE:39 -- n1 = " + str(n1))
     while n1!=n2:
-        print("LINE:38 -- n1 = " + str(n1))
         left_n1, right_n1 = get_lr(n1)
 
         if n2 == left_n1 or n2 == right_n1:
-            print("DONE")
+            print(n1, n2)
+            print("Found")
+            return
         else:
-            if n1 == 3:
-                print()
-
             h_n1 = get_height(n1)
             n2_parent_at_h = get_root_at_height(n2, h_n2, h_n1+1)
 
             if h_n2 <= h_n1:
                 n1 = n1 // 2
-            elif n1 == 1:
-                if get_tree_relative_position(n2_parent_at_h, 2) == 'left':
-                    n1 = n1 * 2
-                else:
-                    n1 = (n1 * 2) + 1
+            # elif n1 == 1:
+            #     if get_tree_relative_position(n2_parent_at_h, 2) == 'left':
+            #         n1 = n1 * 2
+            #     else:
+            #         n1 = (n1 * 2) + 1
 
-                if get_tree_relative_position(get_line_position(n1, h_n1), h_n1) == relative_position_n2:
-                    print("LINE:61 -- n1 = " + str(n1))
-                else:
-                    n1 = n1 // 2
-            elif get_tree_relative_position(get_line_position(n1, h_n1), h_n1) == relative_position_n2:
+                # if get_tree_relative_position(get_line_position(n1, h_n1), h_n1) == relative_position_n2:
+                #     print("LINE:61 -- n1 = " + str(n1))
+                # else:
+                #     n1 = n1 // 2
+            elif n1 == 1 or get_tree_relative_position(get_line_position(n1, h_n1), h_n1) == relative_position_n2:
                 # WE NEED TO FIND IF SAME SIDE
-                pass
-
+                n1 = n2_parent_at_h
             else:
                 n1 = n1 // 2
 
